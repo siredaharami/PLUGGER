@@ -46,7 +46,7 @@ from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter,
                  ImageFont, ImageOps)
 from youtubesearchpython.__future__ import VideosSearch
 
-from config import START_IMG_URL
+from config import START_IMAGE_URL
 
 
 from PIL import Image, ImageDraw, ImageEnhance
@@ -507,7 +507,7 @@ async def gen_thumb(videoid):
         background.save(f"cache/{videoid}.png")
         return f"cache/{videoid}.png"
     except Exception:
-        return YOUTUBE_IMG_URL
+        return START_IMAGE_URL
         
 
     
