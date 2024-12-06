@@ -1,7 +1,7 @@
 import aiohttp, aiofiles, asyncio, base64, logging, config
 import os, platform, random, re, socket
 import sys, time, textwrap
-from YukkiMusic import bot, app, call
+from YukkiMusic import bot, app, call, LOGGER
 from os import getenv
 from io import BytesIO
 from time import strftime
@@ -42,36 +42,6 @@ from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 
 
-loop = asyncio.get_event_loop()
-
-
-# versions dictionary
-__version__ = {
-    "AP": "1.0.0 Mini",
-    "Python": platform.python_version(),
-    "Pyrogram": pyro_version,
-    "PyTgCalls": pytgcalls_version,
-}
-
-
-# store all logs
-logging.basicConfig(
-    format="[%(name)s]:: %(message)s",
-    level=logging.INFO,
-    datefmt="%H:%M:%S",
-    handlers=[
-        RotatingFileHandler("logs.txt", maxBytes=(1024 * 1024 * 5), backupCount=10),
-        logging.StreamHandler(),
-    ],
-)
-
-logging.getLogger("apscheduler").setLevel(logging.ERROR)
-logging.getLogger("asyncio").setLevel(logging.ERROR)
-logging.getLogger("httpx").setLevel(logging.ERROR)
-logging.getLogger("pyrogram").setLevel(logging.ERROR)
-logging.getLogger("pytgcalls").setLevel(logging.ERROR)
-
-LOGGER = logging.getLogger("SYSTEM")
 
 
 # config variables
