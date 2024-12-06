@@ -552,10 +552,6 @@ async def remove_active_media_chat(chat_id):
 
 # VC Player Queue
 
-def create_thumbnail(image_path, save_path, size=(200, 200)):
-    image = Image.open(image_path)
-    image.thumbnail(size)
-    image.save(save_path)
 
 
 
@@ -842,10 +838,10 @@ async def stream_audio_or_video(client, message):
                 channel = "Unknown Channel"
         stream_file = url if url else result["link"]
         result_x = {
-            "title": title_x,
+            "title": title,
             "id": vid_id,
             "link": vid_url,
-            "duration": duration_x,
+            "duration": duration,
             "views": views,
             "channel": channel,
         }
@@ -886,7 +882,7 @@ async def stream_audio_or_video(client, message):
     try:
         if call_status == "PLAYING" or call_status == "PAUSED":
             try:
-                thumbnail = await gen_thumb(result_x, user.id)
+                thumbnail = await gen_thumb(user.id)
                 position = await add_to_queue(
                     chat_id, user, title, duration, stream_file, stream_type, thumbnail
                 )
