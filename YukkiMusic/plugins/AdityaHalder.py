@@ -274,6 +274,12 @@ With Your ☛ Other Friends.**"""
                         callback_data="open_command_list",
                     )
                 ],
+                [
+                    InlineKeyboardButton(
+                        text="💀 Close Menu",
+                        callback_data="force_close",
+                    )
+                ],
             ]
         )
         if START_IMAGE_URL:
