@@ -11,6 +11,9 @@ from datetime import datetime
 from typing import Union, List, Pattern
 from logging.handlers import RotatingFileHandler
 
+from PIL import Image, ImageDraw, ImageFont
+
+
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
@@ -548,6 +551,12 @@ async def remove_active_media_chat(chat_id):
 
 
 # VC Player Queue
+
+def create_thumbnail(image_path, save_path, size=(200, 200)):
+    image = Image.open(image_path)
+    image.thumbnail(size)
+    image.save(save_path)
+
 
 
 async def add_to_queue(
@@ -1216,9 +1225,9 @@ async def update_repo_latest(client, message):
         return await response.edit("Git Command Error")
     except InvalidGitRepositoryError:
         return await response.edit("Invalid Git Repsitory")
-    to_exc = f"git fetch origin aditya &> /dev/null"
+    to_exc = f"git fetch origin main &> /dev/null"
     os.system(to_exc)
-    await asyncio.sleep(7)
+    await asyncio.sleep(3)
     verification = ""
     REPO_ = repo.remotes.origin.url.split(".git")[0]  # main git repository
     for checks in repo.iter_commits(f"HEAD..origin/aditya"):
@@ -1247,7 +1256,7 @@ async def update_repo_latest(client, message):
         f"{nrs.text}\n\nBot was updated successfully! Now, wait for 1 - 2 mins until the bot reboots!"
     )
     os.system("pip3 install -r requirements.txt --force-reinstall")
-    os.system(f"kill -9 {os.getpid()} && python3 -m AdityaHalder")
+    os.system(f"kill -9 {os.getpid()} && python3 -m YukkiMusic")
     sys.exit()
     return
 
