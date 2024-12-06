@@ -75,8 +75,8 @@ LOGGER = logging.getLogger("SYSTEM")
 
 
 # config variables
-if os.path.exists("Config.env"):
-    load_dotenv("Config.env")
+if os.path.exists("Config.py"):
+    load_dotenv("Config.py")
 
 API_ID = int(getenv("API_ID", 0))
 API_HASH = getenv("API_HASH", None)
@@ -115,23 +115,7 @@ def rgx(pattern: Union[str, Pattern]):
 bot_owner_only = pyrofl.user(OWNER_ID)
 
 
-# all clients
 
-app = Client(
-    name="App",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    session_string=str(STRING_SESSION),
-)
-
-bot = Client(
-    name="Bot",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
-)
-
-call = PyTgCalls(app)
 call_config = GroupCallConfig(auto_start=False)
 
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
@@ -143,86 +127,6 @@ __start_time__ = time.time()
 
 # start and run
 
-
-async def main():
-    LOGGER.info("🐬 Updating Directories ...")
-    if "cache" not in os.listdir():
-        os.mkdir("cache")
-    if "cookies.txt" not in os.listdir():
-        LOGGER.info("⚠️ 'cookies.txt' - Not Found❗")
-        sys.exit()
-    if "downloads" not in os.listdir():
-        os.mkdir("downloads")
-    for file in os.listdir():
-        if file.endswith(".session"):
-            os.remove(file)
-    for file in os.listdir():
-        if file.endswith(".session-journal"):
-            os.remove(file)
-    LOGGER.info("✅ All Directories Updated.")
-    await asyncio.sleep(1)
-    LOGGER.info("🌐 Checking Required Variables ...")
-    if API_ID == 0:
-        LOGGER.info("❌ 'API_ID' - Not Found ‼️")
-        sys.exit()
-    if not API_HASH:
-        LOGGER.info("❌ 'API_HASH' - Not Found ‼️")
-        sys.exit()
-    if not BOT_TOKEN:
-        LOGGER.info("❌ 'BOT_TOKEN' - Not Found ‼️")
-        sys.exit()
-    if not STRING_SESSION:
-        LOGGER.info("❌ 'STRING_SESSION' - Not Found ‼️")
-        sys.exit()
-
-    if not MONGO_DB_URL:
-        LOGGER.info("'MONGO_DB_URL' - Not Found !!")
-        sys.exit()
-    try:
-        await mongo_async_cli.admin.command('ping')
-    except Exception:
-        LOGGER.info("❌ 'MONGO_DB_URL' - Not Valid !!")
-        sys.exit()
-    LOGGER.info("✅ Required Variables Are Collected.")
-    await asyncio.sleep(1)
-    LOGGER.info("🌀 Starting All Clients ...")
-    try:
-        await bot.start()
-    except Exception as e:
-        LOGGER.info(f"🚫 Bot Error: {e}")
-        sys.exit()
-    if LOG_GROUP_ID != 0:
-        try:
-            await bot.send_message(LOG_GROUP_ID, "**🤖 Bot Started.**")
-        except Exception:
-            pass
-    LOGGER.info("✅ Bot Started.")
-    try:
-        await app.start()
-    except Exception as e:
-        LOGGER.info(f"🚫 Assistant Error: {e}")
-        sys.exit()
-    try:
-        await app.join_chat("AdityaServer")
-        await app.join_chat("AdityaDiscus")
-    except Exception:
-        pass
-    if LOG_GROUP_ID != 0:
-        try:
-            await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
-        except Exception:
-            pass
-    LOGGER.info("✅ Assistant Started.")
-    try:
-        await call.start()
-    except Exception as e:
-        LOGGER.info(f"🚫 PyTgCalls Error: {e}")
-        sys.exit()
-    LOGGER.info("✅ PyTgCalls Started.")
-    await asyncio.sleep(1)
-    LOGGER.info("✅ Sucessfully Hosted Your Bot !!")
-    LOGGER.info("✅ Now Do Visit: @AdityaServer !!")
-    await idle()
 
 
 
@@ -1552,10 +1456,3 @@ async def broadcast_message(client, message):
             await message.reply_text("**✅ Broadcast Messages To {0} Users.**".format(susr))
         except:
             pass
-
-
-
-
-
-if __name__ == "__main__":
-    loop.run_until_complete(main())
