@@ -57,7 +57,117 @@ from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 
 
+# Memory Database
 
+ACTIVE_AUDIO_CHATS = []
+ACTIVE_VIDEO_CHATS = []
+ACTIVE_MEDIA_CHATS = []
+
+QUEUE = {}
+
+# Some Required Functions ...!!
+
+
+def _netcat(host, port, content):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((host, port))
+    s.sendall(content.encode())
+    s.shutdown(socket.SHUT_WR)
+    while True:
+        data = s.recv(4096).decode("utf-8").strip("\n\x00")
+        if not data:
+            break
+        return data
+    s.close()
+
+
+async def paste_queue(content):
+    loop = asyncio.get_running_loop()
+    link = await loop.run_in_executor(None, partial(_netcat, "ezup.dev", 9999, content))
+    return link
+
+
+
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+    while count < 4:
+        count += 1
+        if count < 3:
+            remainder, result = divmod(seconds, 60)
+        else:
+            remainder, result = divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+    for i in range(len(time_list)):
+        time_list[i] = str(time_list[i]) + time_suffix_list[i]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+    return ping_time
+
+
+
+
+
+# Mongo Database Functions
+
+chatsdb = mongodb.chatsdb
+usersdb = mongodb.usersdb
+
+
+
+
+# Served Chats
+
+async def is_served_chat(chat_id: int) -> bool:
+    chat = await chatsdb.find_one({"chat_id": chat_id})
+    if not chat:
+        return False
+    return True
+
+
+async def get_served_chats() -> list:
+    chats_list = []
+    async for chat in chatsdb.find({"chat_id": {"$lt": 0}}):
+        chats_list.append(chat)
+    return chats_list
+
+
+async def add_served_chat(chat_id: int):
+    is_served = await is_served_chat(chat_id)
+    if is_served:
+        return
+    return await chatsdb.insert_one({"chat_id": chat_id})
+
+
+
+# Served Users
+
+async def is_served_user(user_id: int) -> bool:
+    user = await usersdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+
+
+async def get_served_users() -> list:
+    users_list = []
+    async for user in usersdb.find({"user_id": {"$gt": 0}}):
+        users_list.append(user)
+    return users_list
+
+
+async def add_served_user(user_id: int):
+    is_served = await is_served_user(user_id)
+    if is_served:
+        return
+    return await usersdb.insert_one({"user_id": user_id})
 
 
 # Thumbnail Generator Area
