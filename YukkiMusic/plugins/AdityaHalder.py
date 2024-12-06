@@ -1273,7 +1273,7 @@ async def update_repo_latest(client, message):
     await asyncio.sleep(3)
     verification = ""
     REPO_ = repo.remotes.origin.url.split(".git")[0]  # main git repository
-    for checks in repo.iter_commits(f"HEAD..origin/aditya"):
+    for checks in repo.iter_commits(f"HEAD..origin/main"):
         verification = str(checks.count())
     if verification == "":
         return await response.edit("Bot is up-to-date!")
