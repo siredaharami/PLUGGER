@@ -1,5 +1,4 @@
-# Command & Callback Handlers
-
+from typing import Union, List, Pattern
 
 def cdx(commands: Union[str, List[str]]):
     return pyrofl.command(commands, ["/", "!", "."])
