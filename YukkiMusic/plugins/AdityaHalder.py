@@ -4,6 +4,7 @@ import sys, time, textwrap
 from YukkiMusic import bot as bot, app, call, LOGGER
 from os import getenv
 from YukkiMusic import *
+from YukkiMusic.command import *
 from io import BytesIO
 from time import strftime
 from functools import partial
