@@ -1,0 +1,14 @@
+aiofiles
+aiohttp
+asyncio
+gitpython
+httpx
+motor
+ntgcalls
+pillow
+py-tgcalls
+python-dotenv
+tgcrypto
+youtube-search-python
+yt-dlp
+PyrogramMod
