@@ -1,4 +1,6 @@
 from typing import Union, List, Pattern
+from pyrogram import Client, filters as pyrofl
+from pytgcalls import PyTgCalls, filters as pytgfl
 
 def cdx(commands: Union[str, List[str]]):
     return pyrofl.command(commands, ["/", "!", "."])
