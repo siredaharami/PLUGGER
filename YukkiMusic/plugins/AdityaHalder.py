@@ -432,7 +432,7 @@ async def gen_thumb(videoid):
                     f = await aiofiles.open(
                         f"cache/thumb{videoid}.png", mode="wb"
                     )
-                    await f.write(await resp.read())
+                    await f.write(await data.read())
                     await f.close()
 
         youtube = Image.open(f"cache/thumb{videoid}.png")
@@ -886,7 +886,7 @@ async def stream_audio_or_video(client, message):
     try:
         if call_status == "PLAYING" or call_status == "PAUSED":
             try:
-                thumbnail = await create_thumbnail(result_x, user.id)
+                thumbnail = await gen_thumb(result_x, user.id)
                 position = await add_to_queue(
                     chat_id, user, title, duration, stream_file, stream_type, thumbnail
                 )
@@ -993,7 +993,7 @@ async def stream_audio_or_video(client, message):
             except TelegramServerError:
                 return await aux.edit_text("**⚠️ Telegram Server Issue❗...**")
             try:
-                thumbnail = await create_thumbnail(result_x, user.id)
+                thumbnail = await gen_thumb(result_x, user.id)
                 position = await add_to_queue(
                     chat_id, user, title, duration, stream_file, stream_type, thumbnail
                 )
