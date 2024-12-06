@@ -45,8 +45,8 @@ from youtubesearchpython.__future__ import VideosSearch
 
 
 # config variables
-if os.path.exists("Config.py"):
-    load_dotenv("Config.py")
+if os.path.exists("Config.env"):
+    load_dotenv("Config.env")
 
 API_ID = int(getenv("API_ID", 0))
 API_HASH = getenv("API_HASH", None)
